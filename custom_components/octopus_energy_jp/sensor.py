@@ -36,7 +36,7 @@ SENSOR_DESCRIPTIONS: tuple[OctopusEnergyJPSensorEntityDescription, ...] = (
         name="Latest Electricity Reading",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
-        state_class=SensorStateClass.MEASUREMENT,
+        # No state_class - this is informational only, not for Energy Dashboard
         value_fn=lambda data: data.latest_reading,
     ),
     OctopusEnergyJPSensorEntityDescription(
@@ -44,7 +44,7 @@ SENSOR_DESCRIPTIONS: tuple[OctopusEnergyJPSensorEntityDescription, ...] = (
         name="Today's Electricity Usage",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
-        state_class=SensorStateClass.TOTAL,
+        state_class=SensorStateClass.TOTAL_INCREASING,
         value_fn=lambda data: data.today_total,
     ),
     OctopusEnergyJPSensorEntityDescription(
@@ -52,7 +52,7 @@ SENSOR_DESCRIPTIONS: tuple[OctopusEnergyJPSensorEntityDescription, ...] = (
         name="Yesterday's Electricity Usage",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
-        state_class=SensorStateClass.TOTAL,
+        # No state_class - this is a historical value from yesterday
         value_fn=lambda data: data.yesterday_total,
     ),
 )
