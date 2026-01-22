@@ -10,7 +10,6 @@ import aiohttp
 from .const import (
     API_URL,
     QUERY_OBTAIN_TOKEN,
-    QUERY_REFRESH_TOKEN,
     QUERY_ACCOUNT_VIEWER,
     QUERY_HALF_HOURLY_READINGS,
 )
@@ -82,8 +81,8 @@ class OctopusEnergyJPApi:
                     
                     # Check if the error is due to JWT expiration
                     if "expired" in error_message.lower() and authenticated and retry_on_auth_error:
-                        _LOGGER.debug("JWT token expired, attempting to refresh")
-                        if await self._refresh_or_reauthenticate():
+                        _LOGGER.debug("JWT token expired, attempting to re-authenticate")
+                        if await self._reauthenticate():
                             # Retry the query with the new token
                             return await self._execute_query(
                                 query, variables, authenticated, retry_on_auth_error=False
@@ -98,61 +97,15 @@ class OctopusEnergyJPApi:
             _LOGGER.error("Connection error: %s", err)
             raise OctopusEnergyJPConnectionError(f"Connection error: {err}") from err
 
-    async def _refresh_or_reauthenticate(self) -> bool:
-        """Try to refresh the token, or re-authenticate if refresh fails."""
-        # First, try to refresh the token
-        if self._refresh_token:
-            try:
-                await self._refresh_access_token()
-                return True
-            except OctopusEnergyJPApiError:
-                _LOGGER.debug("Token refresh failed, attempting full re-authentication")
-        
-        # If refresh fails or no refresh token, try full re-authentication
+    async def _reauthenticate(self) -> bool:
+        """Re-authenticate when the token expires."""
+        _LOGGER.debug("Token expired, re-authenticating...")
         try:
             await self.authenticate()
             return True
         except OctopusEnergyJPAuthError:
             _LOGGER.error("Re-authentication failed")
             return False
-
-    async def _refresh_access_token(self) -> None:
-        """Refresh the access token using the refresh token."""
-        if not self._refresh_token:
-            raise OctopusEnergyJPAuthError("No refresh token available")
-
-        variables = {"refreshToken": self._refresh_token}
-
-        try:
-            # Execute without authentication since we're refreshing
-            headers = {"Content-Type": "application/json"}
-            payload = {"query": QUERY_REFRESH_TOKEN, "variables": variables}
-
-            async with self._session.post(
-                API_URL,
-                json=payload,
-                headers=headers,
-            ) as response:
-                if response.status != 200:
-                    raise OctopusEnergyJPAuthError("Token refresh request failed")
-                
-                result = await response.json()
-                
-                if "errors" in result:
-                    error_message = result["errors"][0].get("message", "Unknown error")
-                    raise OctopusEnergyJPAuthError(f"Token refresh failed: {error_message}")
-                
-                token_data = result.get("data", {}).get("refreshKrakenToken")
-                if not token_data or not token_data.get("token"):
-                    raise OctopusEnergyJPAuthError("Failed to refresh token")
-                
-                self._token = token_data["token"]
-                self._refresh_token = token_data.get("refreshToken", self._refresh_token)
-                
-                _LOGGER.debug("Successfully refreshed access token")
-
-        except aiohttp.ClientError as err:
-            raise OctopusEnergyJPConnectionError(f"Connection error during refresh: {err}") from err
 
     async def authenticate(self) -> bool:
         """Authenticate with email and password to obtain JWT token."""
