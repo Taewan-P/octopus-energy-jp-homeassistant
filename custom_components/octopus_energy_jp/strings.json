@@ -1,0 +1,43 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Octopus Energy Japan",
+                "description": "Enter your Octopus Energy Japan account credentials.",
+                "data": {
+                    "email": "Email",
+                    "password": "Password"
+                }
+            },
+            "reauth_confirm": {
+                "title": "Reauthenticate",
+                "description": "Your session has expired. Please re-enter your credentials.",
+                "data": {
+                    "email": "Email",
+                    "password": "Password"
+                }
+            }
+        },
+        "error": {
+            "invalid_auth": "Invalid email or password.",
+            "cannot_connect": "Failed to connect to Octopus Energy Japan API.",
+            "unknown": "An unexpected error occurred."
+        },
+        "abort": {
+            "already_configured": "This account is already configured."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "electricity_latest": {
+                "name": "Latest Electricity Reading"
+            },
+            "electricity_today": {
+                "name": "Today's Electricity Usage"
+            },
+            "electricity_yesterday": {
+                "name": "Yesterday's Electricity Usage"
+            }
+        }
+    }
+}

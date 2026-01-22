@@ -1,0 +1,11 @@
+{
+  "domain": "octopus_energy_jp",
+  "name": "Octopus Energy Japan",
+  "codeowners": [],
+  "config_flow": true,
+  "documentation": "https://github.com/Taewan-P/octopus-energy-jp-homeassistant",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/Taewan-P/octopus-energy-jp-homeassistant/issues",
+  "requirements": [],
+  "version": "1.0.0"
+}
