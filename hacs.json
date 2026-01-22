@@ -1,6 +1,7 @@
 {
     "name": "Octopus Energy Japan",
     "render_readme": true,
+    "country": "JP",
     "domains": [
         "sensor"
     ],
