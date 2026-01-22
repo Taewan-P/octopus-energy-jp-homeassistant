@@ -50,3 +50,13 @@ query halfHourlyReadings($accountNumber: String!, $fromDatetime: DateTime, $toDa
   }
 }
 """
+
+QUERY_REFRESH_TOKEN = """
+mutation refreshKrakenToken($refreshToken: String!) {
+  refreshKrakenToken(refreshToken: $refreshToken) {
+    token
+    refreshToken
+    refreshExpiresIn
+  }
+}
+"""
