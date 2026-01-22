@@ -33,7 +33,6 @@ class OctopusEnergyJPSensorEntityDescription(SensorEntityDescription):
 SENSOR_DESCRIPTIONS: tuple[OctopusEnergyJPSensorEntityDescription, ...] = (
     OctopusEnergyJPSensorEntityDescription(
         key="electricity_latest",
-        translation_key="electricity_latest",
         name="Latest Electricity Reading",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
@@ -42,7 +41,6 @@ SENSOR_DESCRIPTIONS: tuple[OctopusEnergyJPSensorEntityDescription, ...] = (
     ),
     OctopusEnergyJPSensorEntityDescription(
         key="electricity_today",
-        translation_key="electricity_today",
         name="Today's Electricity Usage",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
@@ -51,7 +49,6 @@ SENSOR_DESCRIPTIONS: tuple[OctopusEnergyJPSensorEntityDescription, ...] = (
     ),
     OctopusEnergyJPSensorEntityDescription(
         key="electricity_yesterday",
-        translation_key="electricity_yesterday",
         name="Yesterday's Electricity Usage",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
